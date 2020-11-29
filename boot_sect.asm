@@ -1,17 +1,13 @@
+org 0x7C00
+bits 16
 
-org 0x7C00                      ; BIOS loads our programm at this address
-bits 16                         ; We're working at 16-bit mode here
+cli
+mov di, boot_msg
+call print_info_string
+hlt
 
-start:
-	cli
-	mov si, msg
-	mov ah, 0x0E
-.loop	lodsb
-	or al, al
-	jz halt
-	int 0x10
-	jmp .loop
-halt:	hlt
-msg:	db "Hello, World!", 0
+%include "print/print_string.asm"
+
+boot_msg: db "Booting EOS...",0
 times 510-($-$$) db 0
 dw 0xAA55
