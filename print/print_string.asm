@@ -1,9 +1,5 @@
-
-print_hex:
-	ret
-print_info_string:
-	mov bx, di
-	mov di, info_prefix
+print_string_with_prefix:
+	mov bx, si
 	call print_string
 	mov di, bx
 	call print_string
@@ -11,12 +7,12 @@ print_info_string:
 print_string:
 	mov si, di
         mov ah, 0x0E
-.loop   lodsb
+.print_string_loop   lodsb
         or al, al
-        jz fin
+        jz .print_string_fin
         int 0x10
-        jmp .loop
-fin:   	ret
+        jmp .print_string_loop
+.print_string_fin   	ret
 
 info_prefix: db "[Info]: ",0
 error_prefix: db "[Error]: ",0
