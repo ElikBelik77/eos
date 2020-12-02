@@ -1,32 +1,35 @@
+[bits 16]
 [org 0x7c00]
-mov bp, 0x9000
-mov sp, bp
+jmp 0:real_mode_start
+%include "pm/gdt.asm"
+%include "print/print_string.asm"
+%include "pm/switch_to_pm.asm"
+BOOT_DRIVE db 0
+REAL_MODE_MESSAGE db "EOS is in 16bit real-mode",0
+PM_MESSAGE db "EOS is in 32bit protected-mode",0
+
+real_mode_start:
+mov [BOOT_DRIVE], dl
+mov sp, 0xFFFC
 mov di, info_prefix
-mov si, real_mode_message
+mov si, REAL_MODE_MESSAGE
 call print_string_with_prefix
 
 call switch_to_pm
 
-
-
-;mov dh, 2
-;mov dl, [BOOT_DRIVE]
-;mov bx, 0x9000
-;call os_disk_load
-
-%include "print/print_string.asm"
-%include "print/print_string_pm.asm"
-%include "gdt.asm"
-%include "switch_to_pm.asm"
 [bits 32]
+%include "print/print_string_pm.asm"
+
 BEGIN_PM:
-	mov ebx, protected_mode_message
+	mov ax, DATA_SEG
+	mov ds, ax
+	mov ss, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ebx, PM_MESSAGE
 	call print_string_pm
 	jmp $
-
-BOOT_DRIVE: db 0
-real_mode_message: db "EOS is in 16bit real-mode", 10, 13, 0
-protected_mode_message: db "EOS is in 32bit protected-mode", 0
 
 times 510-($-$$) db 0
 dw 0xaa55

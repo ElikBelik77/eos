@@ -1,6 +1,7 @@
 gdt_start:
 gdt_null:
-	times 2 dd 0x0
+	dd 0x0
+	dd 0x0
 gdt_code:
 	dw 0xffff 	;limit
 	dw 0x0		;base 0-15
@@ -17,7 +18,7 @@ gdt_data:
 	db 0x0
 gdt_end:
 gdt_descriptor:
-	dw gdt_end-gdt_start-1
+	dw gdt_end - gdt_start - 1
 	dd gdt_start
 
 CODE_SEG equ gdt_code - gdt_start
