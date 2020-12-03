@@ -7,6 +7,4 @@ To build the operating system simply:
 make all
 ```
 To run the operating system you need bochs or qemu and run
-```
-make bochs
-``` or ```make qemu```
+```make bochs``` or ```make qemu```
