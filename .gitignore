@@ -1,2 +1,6 @@
 *.swp
 *.save
+*.bin
+*.o
+*.map
+*.dis
