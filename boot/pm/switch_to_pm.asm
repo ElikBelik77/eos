@@ -2,7 +2,6 @@
 switch_to_pm:
 	cli
 	lgdt [gdt_descriptor]
-	sti
 	mov eax, cr0
 	or eax, 0x1
 	mov cr0, eax

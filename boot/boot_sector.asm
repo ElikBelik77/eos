@@ -17,7 +17,7 @@ call switch_to_pm
 
 load_kernel:
 mov bx, KERNEL_OFFSET
-mov dh, 4
+mov dh, 15
 mov dl, [BOOT_DRIVE]
 call os_disk_load
 ret
