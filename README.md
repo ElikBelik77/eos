@@ -2,9 +2,13 @@
 It's not a cryptographic coin project - it's an operating system
 
 ### Build & Run
+You need to install bochs to run this OS.
+
 To build the operating system simply:
 ```bash
 make all
 ```
-To run the operating system you bochs and run:
-```make bochs``` or ```make qemu```
+And run with:
+```
+make run
+```
