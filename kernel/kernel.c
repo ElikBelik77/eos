@@ -1,11 +1,26 @@
 #include "drivers/screen.h"
-#include "idt/idt.h"
+#include "int/idt.h"
+#include "int/handler.h"
+void keyboard_irq();
+
+ScreenDriver* screenDriver;
+InterruptHandler* ihandler;
+KeyboardDriver* keyboardDriver;
 void main() {
-	ScreenDriver driver;
-	init_screen_driver(&driver);
-	driver.clear_screen();
-	driver.print(&driver, "[>] EOS is now running in 32bit protected-mode\n");
-	driver.print(&driver, "[!] Attempting to load the IDT\n");
+	screenDriver = get_screen_driver();
+	screenDriver->clear_screen();
+	screenDriver->print(screenDriver, "[>] EOS is now running in 32bit protected-mode\n");
+	screenDriver->print(screenDriver, "[!] Loading IDT\n");
 	init_idt();
-	driver.print(&driver, "[*] IDT Loaded\n");
+	screenDriver->print(screenDriver, "[*] IDT Loaded\n");
+	screenDriver->print(screenDriver, "[!] Loading interrupts\n");
+	ihandler = get_interrupt_handler();
+	ihandler->keyboard_irq = keyboard_irq;
+	screenDriver->print(screenDriver, "[*] Interrupts loaded\n");
+}
+
+
+
+void keyboard_irq() {
+	screenDriver->print(screenDriver, "Keyboard IRQ\n");
 }

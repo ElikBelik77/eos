@@ -15,7 +15,7 @@ struct ScreenDriver {
 typedef struct ScreenDriver ScreenDriver;
 
 //Initiates a new screen driver.
-void init_screen_driver(ScreenDriver*);
+ScreenDriver* get_screen_driver();
 #define VIDEO_MEMORY 0xb8000
 #define WHITE_ON_BLACK 0x0f
 #define MAX_ROWS 25
