@@ -10,11 +10,10 @@ os-image: boot/boot_sector.bin kernel.bin
 
 kernel.bin: kernel/kernel_entry.o ${OBJ}
 	ld -o $@ -m elf_i386 -Ttext 0x1000 $^ --oformat binary
-kernel/kernel_entry.o: boot/kernel_entry.asm
-	nasm $< -f elf -o $@
-
 %.o: %.c ${HEADERS}
 	gcc -m32 -ffreestanding -fno-pie -c $< -o $@
+kernel/kernel_entry.o: boot/kernel_entry.asm
+	nasm $< -f elf -o $@
 %.bin: %.asm
 	nasm $< -f bin -I 'boot/' -o $@
 

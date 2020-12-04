@@ -1,5 +1,5 @@
 #include "screen.h"
-#include "../../port_io.h"
+#include "../port_io.h"
 int print(ScreenDriver*, char*);
 int get_cursor();
 void clear_screen();
@@ -23,7 +23,7 @@ int print_at(ScreenDriver *driver, char* string, int col, int row, char attribut
 	if (col >= 0 && row >= 0) {
 		set_cursor(get_screen_offset(col, row));
 	}
-	while (!string[i]) {
+	while (string[i]) {
 		out += print_char(string[i++], col, row, attribute);
 	}
 	return out;
@@ -42,7 +42,8 @@ int print_char(char character, int col, int row, char attribute) {
 		offset = get_cursor();
 	}
 	if (character == '\n') {
-		offset = get_screen_offset(79, row);
+		int rows = offset / (2*MAX_COLS);
+		offset = get_screen_offset(79, rows);
 	}
 	else {
 		vidmem[offset] = character;
@@ -50,11 +51,12 @@ int print_char(char character, int col, int row, char attribute) {
 	}
 	offset += 2;
 	//offset = handle_scrolling(offset);
-//	set_cursor(offset);
+	set_cursor(offset);
 	return 1;
 }
 
 void set_cursor(int offset) {
+	offset /= 2;
 	port_byte_out(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_LOW_REG);
 	port_byte_out(IO_PORT_SCREEN_REG_DATA, (offset & 0xFF));
 	port_byte_out(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_HIGH_REG);
