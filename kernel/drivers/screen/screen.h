@@ -1,8 +1,10 @@
 #ifndef SCREEN_H_
 #define SCREEN_H_
-typedef struct Driver {
-	int (*print)(struct Driver*, char*, int, int);
-} ScreenDriver;
+struct ScreenDriver {
+	int (*print)(struct ScreenDriver*, char*);
+	void (*clear_screen)();
+};
+typedef struct ScreenDriver ScreenDriver;
 void init_screen_driver(ScreenDriver*);
 #define VIDEO_MEMORY 0xb8000
 #define WHITE_ON_BLACK 0x0f

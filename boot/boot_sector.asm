@@ -25,7 +25,7 @@ mov di, info_prefix
 mov si, LOADING_KERNEL_MESSAGE
 call print_string_with_prefix
 mov bx, KERNEL_OFFSET
-mov dh, 1
+mov dh, 4
 mov dl, [BOOT_DRIVE]
 call os_disk_load
 ret

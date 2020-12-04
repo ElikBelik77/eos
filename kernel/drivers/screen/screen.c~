@@ -82,5 +82,5 @@ void clear_screen() {
 			print_char(' ', col, row, WHITE_ON_BLACK);
 		}
 	}
-	set_cursor(get_screen_offset(0,0));
+//	set_cursor(get_screen_offset(0,0));
 }
