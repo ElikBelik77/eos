@@ -1,13 +1,14 @@
 #include "screen.h"
 #include "../port_io.h"
+#include "../utils.h"
 int print(ScreenDriver*, char*);
 int get_cursor();
 void clear_screen();
-void set_cursor(int);
-int get_screen_offset(int, int);
-int print_char(char, int, int, char);
+void set_cursor(int offset);
+int get_screen_offset(int col, int row);
+int print_char(char character, int col, int row, char attr);
 int print_at (ScreenDriver* driver, char* string, int col, int row, char attribute);
-
+int handle_scrolling(int offset);
 
 void init_screen_driver(ScreenDriver* driver) {
 	(*driver).print = &print;
@@ -50,7 +51,7 @@ int print_char(char character, int col, int row, char attribute) {
 		vidmem[offset + 1] = attribute;
 	}
 	offset += 2;
-	//offset = handle_scrolling(offset);
+	offset = handle_scrolling(offset);
 	set_cursor(offset);
 	return 1;
 }
@@ -85,4 +86,24 @@ void clear_screen() {
 		}
 	}
 	set_cursor(get_screen_offset(0,0));
+}
+
+
+int handle_scrolling(int offset) {
+	if (offset < 2*MAX_COLS*MAX_ROWS) {
+		return offset;
+	}
+	int i = 1;
+	unsigned char *vidmem = (unsigned char*)VIDEO_MEMORY;
+	for (; i < MAX_ROWS; i++) {
+		memcpy(get_screen_offset(0, i) + vidmem,
+			get_screen_offset(0, i-1) + vidmem,
+			2*MAX_COLS);
+	}
+	unsigned char *lastline = (unsigned char*)VIDEO_MEMORY + get_screen_offset(0, MAX_ROWS-1);
+	for (i = 0; i < MAX_COLS*2; i++) {
+		lastline[i] = 0;
+	}
+	offset -= 2*MAX_COLS;
+	return offset;
 }
