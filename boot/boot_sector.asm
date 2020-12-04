@@ -14,9 +14,9 @@ real_mode_start:
 mov [BOOT_DRIVE], dl
 mov sp, 0x9000
 mov bp, sp
-mov di, info_prefix
-mov si, REAL_MODE_MESSAGE
-call print_string_with_prefix
+;mov di, info_prefix
+;mov si, REAL_MODE_MESSAGE
+;call print_string_with_prefix
 call load_kernel
 call switch_to_pm
 
@@ -40,8 +40,6 @@ BEGIN_PM:
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
-	mov ebx, PM_MESSAGE
-	call print_string_pm
 	call KERNEL_OFFSET
 
 PM_MESSAGE db "EOS is in 32bit protected-mode", 0
