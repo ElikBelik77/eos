@@ -1,4 +1,6 @@
+#include "drivers/screen/screen.h"
 void main() {
-	char* video_memory = (char*)0xb8000;
-	*video_memory = 'X';
+	ScreenDriver driver;
+	init_screen_driver(&driver);
+	driver.print(&driver, "Hello World!", 0, 0);
 }
