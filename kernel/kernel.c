@@ -34,7 +34,7 @@ void init_interrupt_handler() {
 void keyboard_irq() {
 	Key key;
 //	screenDriver.print(&screenDriver, "> Keyboard echo IRQ\n");
-	keyboardDriver.get_key(&key);
+	keyboardDriver.get_key(&keyboardDriver, &key);
 	char* echo = (char[]) {key.ascii, '\0'};
 
 	screenDriver.print(&screenDriver, echo);

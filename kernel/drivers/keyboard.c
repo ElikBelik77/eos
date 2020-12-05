@@ -1,42 +1,61 @@
 #include "keyboard.h"
 #include "../port_io.h"
-void get_key(Key* key_buff) {
-	char kbd_US [128] = {
-		0,  27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',   
-		'\t', /* <-- Tab */
-		'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',     
-		0, /* <-- control key */
-		'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',  0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',   0,
-		'*',
-		0,  /* Alt */
-		' ',  /* Space bar */
-		0,  /* Caps lock */
-		0,  /* 59 - F1 key ... > */
-		0,   0,   0,   0,   0,   0,   0,   0,
-		0,  /* < ... F10 */
-		0,  /* 69 - Num lock*/
-		0,  /* Scroll Lock */
-		0,  /* Home key */
-		0,  /* Up Arrow */
-		0,  /* Page Up */
-		'-',
-		0,  /* Left Arrow */
-		0,
-		0,  /* Right Arrow */
-		'+',
-		0,  /* 79 - End key*/
-		0,  /* Down Arrow */
-		0,  /* Page Down */
-		0,  /* Insert Key */
-		0,  /* Delete Key */
-		0,   0,   0,
-		0,  /* F11 Key */
-		0,  /* F12 Key */
-		0,  /* All other keys are undefined */
-};
-	unsigned char scan_code = port_byte_in(IO_PORT_KEYBOARD_OUTPUT_BUFFER);
+unsigned char toggle_caps(unsigned char LED_value);
+int check_caps(KeyboardDriver* driver, unsigned char scan_code) {
+	int rsp = 0;
+	if (driver->is_caps && scan_code == SC_CAPS_LOCK_DOWN) {
+		rsp = toggle_caps(0x0);
+		driver->is_caps = 0;
+	}
+	else if (!driver->is_caps && scan_code == SC_CAPS_LOCK_DOWN) {
+		rsp = toggle_caps(0x4);
+		driver->is_caps = 1;
+	}
+	return rsp;
+}
+int check_special_keys(KeyboardDriver* driver, unsigned char scan_code) {
+	int rsp = 0;
+	rsp |= check_caps(driver, scan_code);
+	driver->is_shift = (scan_code == SC_SHIFT_UP ? 0 : driver->is_shift);
+	driver->is_shift = (scan_code == SC_SHIFT_DOWN ? 1: driver->is_shift);
+//	driver->is_caps = scan_code == SC_CAPS_LOCK_UP ? (0: driver->is_caps);
+//	driver->is_caps = scan_code == SC_CAPS_LOCK_DOWN ? (1: driver->is_caps);
+//	driver->is_c
+	return rsp;
+}
+
+unsigned char toggle_caps(unsigned char LED_value) {
+	unsigned char kbd_rsp;
+	while (kbd_rsp != 0xfa) {
+		port_byte_out(IO_PORT_KEYBOARD, 0xED);
+		kbd_rsp = port_byte_in(IO_PORT_KEYBOARD);
+		port_byte_out(IO_PORT_KEYBOARD, LED_value);
+	}
+	while ((kbd_rsp = port_byte_in(IO_PORT_KEYBOARD)) == 0xfa);
+	return kbd_rsp;
+}
+void get_key(KeyboardDriver* driver, Key* key_buff) {
+	unsigned char scan_code = port_byte_in(IO_PORT_KEYBOARD);
 	unsigned char sc2ascii[] = {SCANCODE2ASCII_TABLE};
+	unsigned char scshifted2ascii[] = {SCANCODE2ASCII_TABLE_SHIFT};
+	unsigned char scctrl2ascii[] = {SCANCODE2ASCII_TABLE_CTRL};
+	int kbd_rsp = 0;
+	if (kbd_rsp = check_special_keys(driver, scan_code))
+		return;
 	key_buff->scan_code = scan_code;
+	
+	if (driver->is_shift) {
+		key_buff->ascii = scshifted2ascii[scan_code];
+		return;
+	}
+	if (driver->is_ctrl) {
+		key_buff->ascii = scctrl2ascii[scan_code];
+		return;
+	}
+	if (driver->is_caps && sc2ascii[scan_code] <= 0x7a && sc2ascii[scan_code] >= 0x61) {
+		key_buff->ascii = sc2ascii[scan_code]+'A'-'a';
+		return;
+	}
 	key_buff->ascii = sc2ascii[scan_code];
 }
 
@@ -44,4 +63,7 @@ void get_key(Key* key_buff) {
 
 void init_keyboard_driver(KeyboardDriver* driver) {
 	driver->get_key = get_key;
+	driver->is_shift = 0;
+	driver->is_caps = 0;
+	driver->is_ctrl = 0;
 }
