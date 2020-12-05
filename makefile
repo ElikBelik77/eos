@@ -1,7 +1,7 @@
 C_SOURCES = $(wildcard kernel/*.c kernel/int/*.c kernel/drivers/*.c)
 HEADERS = $(wildcard kernel/*.h kernel/drivers/*.h kernel/int/*.h)
 OBJ = ${C_SOURCES:.c=.o}
-all: os-image
+all: clean os-image
 run: all
 	bochs
 

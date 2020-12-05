@@ -10,7 +10,7 @@ BOOT_DRIVE db 0
 
 real_mode_start:
 mov [BOOT_DRIVE], dl
-mov sp, 0x9000
+mov sp, 0xfffc
 mov bp, sp
 call load_kernel
 call switch_to_pm
