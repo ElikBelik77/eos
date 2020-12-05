@@ -1,7 +1,7 @@
 #include "idt.h"
 #include "../port_io.h"
 IDT_Entry IDT[256];
-
+void load_idt();
 void init_idt() {
         extern int irq0();
         extern int irq1();
