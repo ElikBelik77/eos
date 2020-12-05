@@ -1,11 +1,10 @@
 
 #include "../port_io.h"
 #include "irq_handler.h"
-#include "../drivers/screen.h"
-InterruptHandler* ihandler;
+InterruptHandler* handler;
 
-void inject_interrupt_handler(InterruptHandler* handler) {
-	ihandler = handler;
+void inject_interrupt_handler(InterruptHandler* h) {
+	handler = h;
 }
 
 void irq0_handler(void) {
@@ -13,7 +12,7 @@ void irq0_handler(void) {
 }
 
 void irq1_handler(void) {
-	ihandler->keyboard_irq();
+	handler->keyboard_irq();
 	port_byte_out(0x20, 0x20);
 }
 

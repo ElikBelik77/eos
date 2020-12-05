@@ -10,6 +10,7 @@
 
 struct ScreenDriver {
 	int (*print)(struct ScreenDriver*, char*);
+	int (*print_byte)(struct ScreenDriver*, unsigned char);
 	void (*clear_screen)();
 };
 typedef struct ScreenDriver ScreenDriver;

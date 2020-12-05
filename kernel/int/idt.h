@@ -8,5 +8,5 @@ typedef struct IDT_entry{
 	unsigned short int offset_higherbits;
 } IDT_Entry;
 
-void init_idt();
+void init_idt(void);
 #endif 

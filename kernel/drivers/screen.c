@@ -1,6 +1,7 @@
 #include "screen.h"
 #include "../port_io.h"
 #include "../utils.h"
+char* HEX_TABLE = "0123456789abcdef";
 int print(ScreenDriver*, char*);
 int get_cursor();
 void clear_screen();
@@ -9,16 +10,24 @@ int get_screen_offset(int col, int row);
 int print_char(char character, int col, int row, char attr);
 int print_at (ScreenDriver* driver, char* string, int col, int row, char attribute);
 int handle_scrolling(int offset);
-
+int print_byte(ScreenDriver* driver, unsigned char byte);
 void init_screen_driver(ScreenDriver* driver) {
 	(driver)->print = &print;
 	(driver)->clear_screen = &clear_screen;
+	(driver)->print_byte = &print_byte;
 }
 
 int print(ScreenDriver* driver, char* string) {
 	return print_at(driver, string, -1, -1, WHITE_ON_BLACK);
 }
-
+int print_byte(ScreenDriver* driver, unsigned char byte) {
+	print(driver, "0x");
+	char* numeric_string = (char[]){HEX_TABLE[byte/16], HEX_TABLE[byte%16],'\0'};
+//	print_char(hex_table[((byte&0xf0)>>4)],-1,-1, 0);
+//	print_char(*(hex_table+(byte&0x0f)), -1, -1, 0);
+	print(driver, numeric_string);
+	return 4;
+}
 int print_at(ScreenDriver *driver, char* string, int col, int row, char attribute) {
 	int out = 0, i = 0;
 	if (col >= 0 && row >= 0) {
@@ -55,6 +64,7 @@ int print_char(char character, int col, int row, char attribute) {
 	set_cursor(offset);
 	return 1;
 }
+
 
 void set_cursor(int offset) {
 	offset /= 2;

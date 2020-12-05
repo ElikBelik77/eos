@@ -23,6 +23,6 @@ clean:
 	rm -fr *.bin *.o *.dis *.map os-image
 	rm -fr kernel/*.o boot/*.bin kernel/drivers/*.o
 	rm -fr kernel/int/*.o
-kernel.dis: kernel/kernel.bin
+kernel.dis: kernel.bin
 	ndisasm -b 32 $< > $@
 

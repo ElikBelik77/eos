@@ -2,6 +2,7 @@
 #define KEYBOARD_H_
 typedef struct Key {
 	unsigned char scan_code;
+	unsigned char ascii;
 } Key;
 typedef struct KeyboardDriver {
 	void (*get_key)(Key* key_buf);
