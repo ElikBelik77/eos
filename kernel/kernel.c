@@ -23,7 +23,7 @@ void main() {
 	screenDriver.print(&screenDriver, "[!] Loading keyboard handler\n");
 	init_keyboard_driver(&keyboardDriver);
 	screenDriver.print(&screenDriver, "[*] Keyboard driver loaded\n");
-	screenDriver.print_byte(&screenDriver, 0xff);
+//	screenDriver.print_byte(&screenDriver, 0xff);
 }
 
 void init_interrupt_handler() {
@@ -36,6 +36,7 @@ void keyboard_irq() {
 //	screenDriver.print(&screenDriver, "> Keyboard echo IRQ\n");
 	keyboardDriver.get_key(&key);
 	char* echo = (char[]) {key.ascii, '\0'};
-//	screenDriver.print(&screenDriver, echo);
-	screenDriver.print_byte(&screenDriver, key.scan_code);
+
+	screenDriver.print(&screenDriver, echo);
+//	screenDriver.print_byte(&screenDriver, key.scan_code);
 }
