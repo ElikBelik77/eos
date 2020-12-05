@@ -20,9 +20,8 @@ int check_special_keys(KeyboardDriver* driver, unsigned char scan_code) {
 	rsp |= check_caps(driver, scan_code);
 	driver->is_shift = (scan_code == SC_SHIFT_UP ? 0 : driver->is_shift);
 	driver->is_shift = (scan_code == SC_SHIFT_DOWN ? 1: driver->is_shift);
-//	driver->is_caps = scan_code == SC_CAPS_LOCK_UP ? (0: driver->is_caps);
-//	driver->is_caps = scan_code == SC_CAPS_LOCK_DOWN ? (1: driver->is_caps);
-//	driver->is_c
+	driver->is_ctrl = (scan_code == SC_CTRL_DOWN ? 1: driver->is_ctrl);
+	driver->is_ctrl = (scan_code == SC_CTRL_UP ? 0: driver->is_ctrl);
 	return rsp;
 }
 
@@ -49,6 +48,7 @@ void get_key(KeyboardDriver* driver, Key* key_buff) {
 		key_buff->is_printable = 1;
 		if (is_lowercase(key_buff->ascii) && (driver->is_shift || driver->is_caps)) {
 			key_buff->ascii += 'A'-'a';
+			return;
 		}
 	}
 	else {
