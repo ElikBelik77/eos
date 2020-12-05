@@ -45,14 +45,14 @@ void get_key(KeyboardDriver* driver, Key* key_buff) {
 	int kbd_rsp = 0;
 	if (kbd_rsp = check_special_keys(driver, scan_code))
 		return;
-	if (is_printable(key_buff->ascii)) {
+	if (is_printable(scan_code)) {
 		key_buff->is_printable = 1;
 		if (is_lowercase(key_buff->ascii) && (driver->is_shift || driver->is_caps)) {
 			key_buff->ascii += 'A'-'a';
 		}
 	}
 	else {
-		key_buff->is_printable = 0;
+		key_buff->printable = 0;
 	}
 }
 

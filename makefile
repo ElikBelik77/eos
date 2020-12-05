@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/*.c kernel/int/*.c kernel/drivers/*.c)
-HEADERS = $(wildcard kernel/*.h kernel/drivers/*.h kernel/int/*.h)
+C_SOURCES = $(wildcard kernel/*.c kernel/*/*.c)
+HEADERS = $(wildcard kernel/*.h kernel/*/*.h) 
 OBJ = ${C_SOURCES:.c=.o}
 all: clean os-image
 run: all

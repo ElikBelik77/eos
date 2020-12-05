@@ -3,6 +3,7 @@
 typedef struct Key {
 	unsigned char scan_code;
 	unsigned char ascii;
+	unsigned char is_printable;
 } Key;
 typedef struct KeyboardDriver {
 	void (*get_key)(struct KeyboardDriver* driver, Key* key_buf);

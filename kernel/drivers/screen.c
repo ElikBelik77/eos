@@ -1,6 +1,6 @@
 #include "screen.h"
 #include "../port_io.h"
-#include "../utils.h"
+#include "../utils/mem_utils.h"
 int print(ScreenDriver*, char*);
 int get_cursor();
 void clear_screen();
