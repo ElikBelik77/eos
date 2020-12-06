@@ -1,16 +1,25 @@
 #ifndef KEYBOARD_H_
 #define KEYBOARD_H_
 typedef struct Key {
+	// Scan code of the key
 	unsigned char scan_code;
+	// ASCII value of the key
 	unsigned char ascii;
+	// true if printable, false otherwise.
 	unsigned char is_printable;
 } Key;
 typedef struct KeyboardDriver {
+	// This function returns a key filling the key_buf.
 	void (*get_key)(struct KeyboardDriver* driver, Key* key_buf);
+	// true if ctrl is pressed, false otherwise.
 	int is_ctrl;
+	// true if caps lock is toggled, false otherwise.
 	int is_caps;
+	// true if shift is pressed, false otherwise.
 	int is_shift;
 } KeyboardDriver;
+
+// This function initializes the keyboard driver.
 void init_keyboard_driver(KeyboardDriver* driver);
 
 

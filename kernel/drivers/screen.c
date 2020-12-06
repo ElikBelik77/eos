@@ -10,6 +10,7 @@ int print_char(char character, int col, int row, char attr);
 int print_at (ScreenDriver* driver, char* string, int col, int row, char attribute);
 int handle_scrolling(int offset);
 int print_byte(ScreenDriver* driver, char byte);
+
 void init_screen_driver(ScreenDriver* driver) {
 	(driver)->print = &print;
 	(driver)->clear_screen = &clear_screen;

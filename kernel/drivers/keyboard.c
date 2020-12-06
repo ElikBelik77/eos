@@ -1,8 +1,15 @@
 #include "keyboard.h"
 #include "../port_io.h"
 #include "../utils/string_utils.h"
+// This function toggles the cap locks LED.
 unsigned char toggle_caps(unsigned char LED_value);
 
+/**
+	This function checks if cap locks is pressed and acts
+	accordingly.
+	driver - the keyboard driver.
+	scan_code - the scan code to check.
+**/
 int check_caps(KeyboardDriver* driver, unsigned char scan_code) {
 	int rsp = 0;
 	if (driver->is_caps && scan_code == SC_CAPS_LOCK_DOWN) {
@@ -15,6 +22,11 @@ int check_caps(KeyboardDriver* driver, unsigned char scan_code) {
 	}
 	return rsp;
 }
+
+/**
+	This function checks the status of special keys; e.g:
+	shift/ctrl/caps and changes the driver state.
+**/
 int check_special_keys(KeyboardDriver* driver, unsigned char scan_code) {
 	int rsp = 0;
 	rsp |= check_caps(driver, scan_code);

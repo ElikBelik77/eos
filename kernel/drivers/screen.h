@@ -9,8 +9,11 @@
 **/
 
 struct ScreenDriver {
+	// This function prints a string to the cursor location.
 	int (*print)(struct ScreenDriver*, char*);
+	// This function print a byte in hex to the cursor location.
 	int (*print_byte)(struct ScreenDriver*, char);
+	// This function clears the screen.
 	void (*clear_screen)();
 };
 typedef struct ScreenDriver ScreenDriver;
