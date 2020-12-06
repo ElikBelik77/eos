@@ -20,7 +20,7 @@ kernel/int/irq.o: kernel/int/irq.asm
 	nasm $< -f bin -I 'boot/' -o $@
 
 clean:
-	rm -fr *.bin *.o *.dis *.map os-image
+	rm -fr *.bin *.o *.dis *.map *.c~ os-image
 	rm -fr kernel/*.o boot/*.bin kernel/drivers/*.o
 	rm -fr kernel/int/*.o
 kernel.dis: kernel.bin

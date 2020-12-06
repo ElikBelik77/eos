@@ -50,17 +50,19 @@ unsigned char toggle_caps(unsigned char LED_value) {
 
 void get_key(KeyboardDriver* driver, Key* key_buff) {
 	unsigned char sc2ascii[] = {SCANCODE2ASCII_TABLE};
+	unsigned char sc2ascii_shifted[] = {SCANCODE2ASCII_TABLE_SHIFT};
 	unsigned char scan_code = port_byte_in(IO_PORT_KEYBOARD);
 	key_buff->scan_code = scan_code;
 	key_buff->ascii = sc2ascii[scan_code];
-	int kbd_rsp = 0;
-	if (kbd_rsp = check_special_keys(driver, scan_code))
-		return;
+	int kbd_rsp = check_special_keys(driver, scan_code);
 	if (is_printable(key_buff->ascii)) {
 		key_buff->is_printable = 1;
 		if (is_lowercase(key_buff->ascii) && (driver->is_shift || driver->is_caps)) {
 			key_buff->ascii += 'A'-'a';
 			return;
+		}
+		if(!is_alphabet(key_buff->ascii) && driver->is_shift) {
+			key_buff->ascii = sc2ascii_shifted[scan_code];
 		}
 	}
 	else {
