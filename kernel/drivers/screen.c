@@ -69,10 +69,10 @@ int print_char(char character, int col, int row, char attribute) {
 
 void set_cursor(int offset) {
 	offset /= 2;
-	port_byte_out(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_LOW_REG);
-	port_byte_out(IO_PORT_SCREEN_REG_DATA, (offset & 0xFF));
-	port_byte_out(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_HIGH_REG);
-	port_byte_out(IO_PORT_SCREEN_REG_DATA, (offset >> 8) & 0xFF);
+	outb(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_LOW_REG);
+	outb(IO_PORT_SCREEN_REG_DATA, (offset & 0xFF));
+	outb(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_HIGH_REG);
+	outb(IO_PORT_SCREEN_REG_DATA, (offset >> 8) & 0xFF);
 }
 
 int get_screen_offset(int col, int row) {
@@ -80,10 +80,10 @@ int get_screen_offset(int col, int row) {
 }
 
 int get_cursor() {
-	port_byte_out(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_HIGH_REG);
-	int cursor = port_byte_in(IO_PORT_SCREEN_REG_DATA) << 8;
-	port_byte_out(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_LOW_REG);
-	cursor += port_byte_in(IO_PORT_SCREEN_REG_DATA);
+	outb(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_HIGH_REG);
+	int cursor = inb(IO_PORT_SCREEN_REG_DATA) << 8;
+	outb(IO_PORT_SCREEN_REG_CTRL, CURSOR_LOC_LOW_REG);
+	cursor += inb(IO_PORT_SCREEN_REG_DATA);
 	return cursor * 2;
 }
 

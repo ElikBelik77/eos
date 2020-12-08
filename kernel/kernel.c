@@ -35,7 +35,7 @@ void keyboard_irq() {
 	Key key;
 	keyboardDriver.get_key(&keyboardDriver, &key);
 	char* echo = (char[]) {key.ascii, '\0'};
-	if (key.is_printable)
-		screenDriver.print(&screenDriver, echo);
-//	screenDriver.print_byte(&screenDriver, key.scan_code);
+//	if (key.is_printable)
+//		screenDriver.print(&screenDriver, echo);
+	screenDriver.print_byte(&screenDriver, key.scan_code);
 }

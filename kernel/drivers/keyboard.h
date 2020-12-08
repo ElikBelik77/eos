@@ -29,6 +29,8 @@ void init_keyboard_driver(KeyboardDriver* driver);
 #define SC_SHIFT_UP 0xaa
 #define SC_CTRL_DOWN 0x1d
 #define SC_CTRL_UP 0x9d
+#define SC_NUM_LOCK_DOWN 0x45
+#define SC_NUM_LOCK_UP 0xc5
 #define SCANCODE2ASCII_TABLE /*
        0     1     2     3     4     5     6     7     8     9     A     B     C     D     E     F
 */  0x00, 0x1B, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30, 0x2D, 0x3D, 0x08, 0x09, /*0

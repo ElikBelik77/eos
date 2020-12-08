@@ -40,18 +40,18 @@ int check_special_keys(KeyboardDriver* driver, unsigned char scan_code) {
 unsigned char toggle_caps(unsigned char LED_value) {
 	unsigned char kbd_rsp;
 	while (kbd_rsp != 0xfa) {
-		port_byte_out(IO_PORT_KEYBOARD, 0xED);
-		kbd_rsp = port_byte_in(IO_PORT_KEYBOARD);
-		port_byte_out(IO_PORT_KEYBOARD, LED_value);
+		outb(IO_PORT_KEYBOARD, 0xED);
+		kbd_rsp = inb(IO_PORT_KEYBOARD);
+		outb(IO_PORT_KEYBOARD, LED_value);
 	}
-	while ((kbd_rsp = port_byte_in(IO_PORT_KEYBOARD)) == 0xfa);
+	while ((kbd_rsp = inb(IO_PORT_KEYBOARD)) == 0xfa);
 	return kbd_rsp;
 }
 
 void get_key(KeyboardDriver* driver, Key* key_buff) {
 	unsigned char sc2ascii[] = {SCANCODE2ASCII_TABLE};
 	unsigned char sc2ascii_shifted[] = {SCANCODE2ASCII_TABLE_SHIFT};
-	unsigned char scan_code = port_byte_in(IO_PORT_KEYBOARD);
+	unsigned char scan_code = inb(IO_PORT_KEYBOARD);
 	key_buff->scan_code = scan_code;
 	key_buff->ascii = sc2ascii[scan_code];
 	int kbd_rsp = check_special_keys(driver, scan_code);
