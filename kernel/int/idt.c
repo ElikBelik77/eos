@@ -20,7 +20,7 @@ void init_idt(void) {
         extern int irq13();
         extern int irq14();
         extern int irq15();
-	extern int page_fault_hanlder();
+	extern int trap_page_fault();
 
 	unsigned long irq0_address;
         unsigned long irq1_address;
@@ -38,7 +38,7 @@ void init_idt(void) {
         unsigned long irq13_address;
         unsigned long irq14_address;
         unsigned long irq15_address;
-	unsigned long page_fault_handler_address;
+	unsigned long trap_page_fault_address;
 	unsigned long idt_address;
 	unsigned long idt_ptr[2];
 
@@ -53,12 +53,12 @@ void init_idt(void) {
         outb(0xA1, 0x01);
         outb(0x21, 0x0);
         outb(0xA1, 0x0);
-	page_fault_handler_address = (unsigned long)page_fault_handler;
-	IDT[14].offset_lowerbits = page_fault_handler & 0xffff;
+	trap_page_fault_address = (unsigned long)trap_page_fault;
+	IDT[14].offset_lowerbits = trap_page_fault_address & 0xffff;
 	IDT[14].selector = 0x08;
 	IDT[14].zero = 0;
 	IDT[14].type_attr = 0x8f; //maybe 0x8e ? needs testing.
-	IDT[14].offset_higherbits = (page_fault ? & 0xffff0000) >> 16;
+	IDT[14].offset_higherbits = (trap_page_fault_address & 0xffff0000) >> 16;
 	irq0_address = (unsigned long)irq0;
 	IDT[32].offset_lowerbits = irq0_address & 0xffff;
 	IDT[32].selector = 0x08; /* KERNEL_CODE_SEGMENT_OFFSET */

@@ -1,12 +1,17 @@
 
 #include "../port_io.h"
 #include "irq_handler.h"
+#include <stdint.h>
 InterruptHandler* handler;
 
 void inject_interrupt_handler(InterruptHandler* h) {
 	handler = h;
 }
 
+void page_fault_handler(void) {
+	uint32_t address;
+	asm("movl %%cr2,%0":"=r" (address));
+}
 void irq0_handler(void) {
 	outb(0x20, 0x20);
 }

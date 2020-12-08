@@ -34,7 +34,7 @@ global irq12_handler
 global irq13_handler
 global irq14_handler
 global irq15_handler
-
+global page_fault_handler
 extern irq0_handler
 extern irq1_handler
 extern irq2_handler
@@ -52,6 +52,7 @@ extern irq13_handler
 extern irq14_handler
 extern irq15_handler
 extern page_fault_handler
+
 trap_page_fault:
 	pusha
 	call page_fault_handler
