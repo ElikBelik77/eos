@@ -1,35 +1,46 @@
+#include <stdint.h>
 #include "screen.h"
 #include "../port_io.h"
 #include "../utils/mem_utils.h"
-int print(ScreenDriver*, char*);
+int print(char*);
 int get_cursor();
 void clear_screen();
 void set_cursor(int offset);
 int get_screen_offset(int col, int row);
 int print_char(char character, int col, int row, char attr);
-int print_at (ScreenDriver* driver, char* string, int col, int row, char attribute);
+int print_at (char* string, int col, int row, char attribute);
 int handle_scrolling(int offset);
-int print_byte(ScreenDriver* driver, char byte);
+void print_byte(uint8_t byte);
+void print_word(uint16_t word);
+void print_dword(uint32_t dword);
 
-void init_screen_driver(ScreenDriver* driver) {
-	(driver)->print = &print;
-	(driver)->clear_screen = &clear_screen;
-	(driver)->print_byte = &print_byte;
+
+
+int print(char* string) {
+	return print_at(string, -1, -1, WHITE_ON_BLACK);
 }
-
-
-int print(ScreenDriver* driver, char* string) {
-	return print_at(driver, string, -1, -1, WHITE_ON_BLACK);
-}
-int print_byte(ScreenDriver* driver, char byte) {
+void _print_byte(uint8_t byte) {
 	char* HEX_TABLE = "0123456789abcdef";
-	print(driver,"0x");
 	print_char(HEX_TABLE[(byte&0xf0)>>4], -1,-1,0);
-	print_char(HEX_TABLE[(byte&0xf)], -1,-1,0);
-	print(driver, "\n");
-	return 4;
+        print_char(HEX_TABLE[(byte&0xf)], -1,-1,0);
 }
-int print_at(ScreenDriver *driver, char* string, int col, int row, char attribute) {
+void print_dword(uint32_t dword) {
+	print("0x");
+	_print_byte(dword >> 24);
+	_print_byte(dword >> 16 & 0xff);
+	_print_byte(dword >> 8 & 0xff);
+	_print_byte(dword & 0xff);
+}
+void print_word(uint16_t word) {
+	print("0x");
+	_print_byte(word >> 8);
+	_print_byte(word & 0xff);
+}
+void print_byte(uint8_t byte) {
+	print("0x");
+	_print_byte(byte);
+}
+int print_at(char* string, int col, int row, char attribute) {
 	int out = 0, i = 0;
 	if (col >= 0 && row >= 0) {
 		set_cursor(get_screen_offset(col, row));

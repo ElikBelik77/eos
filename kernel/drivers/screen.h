@@ -1,4 +1,5 @@
 #ifndef SCREEN_H_
+#include <stdint.h>
 #define SCREEN_H_
 /**
 	Struct for the ScreenDriver, allows the user to interact
@@ -8,18 +9,15 @@
 		clear_screen - clears the screen.
 **/
 
-struct ScreenDriver {
-	// This function prints a string to the cursor location.
-	int (*print)(struct ScreenDriver*, char*);
-	// This function print a byte in hex to the cursor location.
-	int (*print_byte)(struct ScreenDriver*, char);
-	// This function clears the screen.
-	void (*clear_screen)();
-};
-typedef struct ScreenDriver ScreenDriver;
+// This function prints a string to the cursor location.
+int print(char*);
+// This function print a byte in hex to the cursor location.
+void print_byte(uint8_t);
+void print_word(uint16_t);
+void print_dword(uint32_t);
+// This function clears the screen.
+void clear_screen();
 
-//Initiates a new screen driver.
-void init_screen_driver(ScreenDriver* driver);
 #define VIDEO_MEMORY 0xb8000
 #define WHITE_ON_BLACK 0x0f
 #define MAX_ROWS 25
