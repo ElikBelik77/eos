@@ -11,8 +11,6 @@ KeyboardDriver keyboardDriver;
 InterruptHandler int_handler;
 
 void main() {
-//	int a = 1/0;
-//	init_paging();
 	clear_screen();
 	print_dword((uint32_t)&main);
 	print("[>] EOS is now running in 32bit protected-mode\n");
@@ -24,7 +22,9 @@ void main() {
 	print("[!] Loading keyboard handler\n");
 	init_keyboard_driver(&keyboardDriver);
 	print("[*] Keyboard driver loaded\n");
+	print_dword(&int_handler);
 	init_paging();
+	print_dword(&int_handler);
 }
 
 void page_fault(uint32_t fault) {

@@ -12,6 +12,7 @@ void init_paging() {
 	for (i=0; i < 1024; i++) {
 		null_page_table[i] = (i*0x1000) | 3;
 	}
+	page_directory[0] = ((uint32_t)null_page_table) | 3;
 	load_page_directory(page_directory);
 	enable_paging();
 }

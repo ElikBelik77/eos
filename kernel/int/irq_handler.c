@@ -9,8 +9,8 @@ void inject_interrupt_handler(InterruptHandler* h) {
 }
 
 void page_fault_handler(void) {
-//	uint32_t address;
-//	asm("movl %%cr2,%0":"=r" (address));
+	uint32_t address;
+	asm("movl %%cr2,%0":"=r" (address));
 	handler->page_fault(0);
 }
 void irq0_handler(void) {
