@@ -23,6 +23,7 @@ kernel/paging/paging_init.o: kernel/paging/paging_init.asm
 clean:
 	rm -fr *.bin *.o *.dis *.map *.c~ os-image
 	rm -fr kernel/*.o boot/*.bin kernel/drivers/*.o
+	rm -fr kernel/*/*.o  kernel/*/*.save
 	rm -fr kernel/int/*.o
 kernel.dis: kernel.bin
 	ndisasm -b 32 $< > $@

@@ -22,9 +22,9 @@ void main() {
 	print("[!] Loading keyboard handler\n");
 	init_keyboard_driver(&keyboardDriver);
 	print("[*] Keyboard driver loaded\n");
-	print_dword(&int_handler);
+	print_dword((uint32_t)&int_handler);
 	init_paging();
-	print_dword(&int_handler);
+	print_dword((uint32_t)&int_handler);
 }
 
 void page_fault(uint32_t fault) {
@@ -42,5 +42,5 @@ void keyboard_irq() {
 	char* echo = (char[]) {key.ascii, '\0'};
 //	if (key.is_printable)
 //		print(&screenDriver, echo);
-	print_byte(key.scan_code);
+//	print_byte(key.scan_code);
 }
