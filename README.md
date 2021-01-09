@@ -19,7 +19,7 @@ make run
 - [ ] SATA/SATAPI disk driver (half complete).
 - [ ] Higher half kernel.
 - [ ] ELF loading.
-- [ ] Tasking system (half complete).
+- [ ] Multitasking (in progress).
 
 
 
